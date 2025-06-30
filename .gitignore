@@ -1,0 +1,40 @@
+# .NET build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# Rider
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Publish output
+publish/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+packages/
+
+# Logs
+*.log
+
+# Others
+*.vs/
+_ReSharper*/
+
+# Test results
+TestResults/
+
+# Local secrets
+secrets.json

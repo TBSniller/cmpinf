@@ -672,3 +672,14 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <https://www.gnu.org/licenses/why-not-lgpl.html>.
+
+
+---
+
+This project uses third-party libraries:
+- Newtonsoft.Json (MIT License) <https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md>
+- LibreHardwareMonitor (MIT License) <https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/blob/master/LICENSE>
+
+See their respective repositories for license details.
+
+---
