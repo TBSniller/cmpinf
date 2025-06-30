@@ -3,12 +3,16 @@
 ## What's this?
 
 ### CmpInf?    
-CmpInf is an application, which shall be used with the SteelSeries GameSense GG software. It ships and uses the [LibreHardwareMonitorLib](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) to fetch system information like CPU temperature or GPU usage and sends it to the GameSense GG software, which will display the **C**o**mp**uter **Inf**ormations on the OLED display.  
-
-
+CmpInf is an application designed to work with the SteelSeries GameSense GG software. It includes and uses [LibreHardwareMonitorLib](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) to retrieve system information such as CPU temperature and GPU usage. This data is then sent to the GameSense GG software, which displays the **C**o**mp**uter **Inf**ormations on the keyboard’s OLED display.  
+  
 ### Why?  
-I have seen that one of the reasons why I have bought the Keyboard were removed. They state that they fight with a security issue which lays down in how the System Monitor was gathering system information. We use LibreHardwareMonitorLib - from what I have read it uses the same (unfixed) Ring0-Driver. I think the attack vendor in this application is way smaller than in the GGs shipped System Monitor, as we do not expose any interfaces.  
+I noticed that one of the reasons I originally bought the keyboard has been removed. According to SteelSeries, they are addressing a security issue related to how the original System Monitor gathered system information.  
+In our case, we use LibreHardwareMonitorLib, which — as far as I know — relies on the same (still unpatched) Ring0 driver. However, I believe the attack surface in this application is much smaller than with the System Monitor that ships with GG, since we do not expose any interfaces to the outside.   
 **Netherless be warned and try to avoid running this tool as administrator.** 
+
+
+https://github.com/user-attachments/assets/8693f539-4208-47f7-9fca-ced591f6035d
+
 
 
 ### How?
@@ -65,8 +69,11 @@ No issues are known so far, if you find one, feel free to raise an issue!
   
 
 ### Credits
-- [LibreHardwareMonitorLib](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) for sensor data <3
-- [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) for easy JSON handling <3
-- [SteelSeries GameSense SDK](https://github.com/SteelSeries/gamesense-sdk) for easy API usage <3
+- [LibreHardwareMonitorLib](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) for sensor data <3  
+- [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) for easy JSON handling <3  
+- [SteelSeries GameSense SDK](https://github.com/SteelSeries/gamesense-sdk) for easy API usage <3  
 
 ### Screenshots
+![apex_oled](https://github.com/user-attachments/assets/6b01f38c-4522-4ba7-840b-92c0a722ffbe)  
+![image](https://github.com/user-attachments/assets/d86b7ce4-732f-4fcd-aed3-c7242c3ec867)  
+![image](https://github.com/user-attachments/assets/f2978d14-ab04-45c2-81b4-ece9565551ba)  
