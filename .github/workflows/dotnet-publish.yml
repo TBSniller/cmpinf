@@ -1,5 +1,8 @@
 name: Build and Publish .NET App
 
+permissions:
+  contents: write
+
 on:
   push:
     tags:
