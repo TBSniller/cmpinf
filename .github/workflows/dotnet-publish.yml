@@ -34,15 +34,7 @@ jobs:
         run: dotnet test --no-build --verbosity normal
 
       - name: Publish Single-File EXE
-        run: >
-          dotnet publish CmpInf/CmpInf.csproj \
-            --configuration Release \
-            --runtime win-x64 \
-            --self-contained true \
-            /p:PublishSingleFile=true \
-            /p:PublishTrimmed=true \
-            /p:IncludeNativeLibrariesForSelfExtract=true \
-            --output publish
+        run: dotnet publish CmpInf/CmpInf.csproj --configuration Release --runtime win-x64 --self-contained true /p:PublishSingleFile=true /p:PublishTrimmed=true /p:IncludeNativeLibrariesForSelfExtract=true --output publish
 
       - name: Upload published artifact
         uses: actions/upload-artifact@v4
