@@ -7,7 +7,7 @@ CmpInf is an application designed to work with the SteelSeries GameSense GG soft
   
 ### Why?  
 I noticed that one of the reasons I originally bought the keyboard has been removed. According to SteelSeries, they are addressing a security issue related to how the original System Monitor gathered system information.  
-In our case, we use LibreHardwareMonitorLib, which — as far as I know — relies on the same (still unpatched) Ring0 driver. However, I believe the attack surface in this application is much smaller than with the System Monitor that ships with GG, since we do not expose any interfaces to the outside.   
+In our case, we use LibreHardwareMonitorLib, which — as far as I know — relies on the same (still unpatched) Ring0 driver. However, I believe the attack surface in this application is much smaller than with the System Monitor that ships with GG, since we do not run as admin by default and do not expose any interfaces to the outside.   
 **Netherless be warned and try to avoid running this tool as administrator.** 
 
 
