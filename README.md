@@ -13,12 +13,17 @@ In our case, we use LibreHardwareMonitorLib, which — as far as I know — reli
 **Netherless be warned and try to avoid running this tool as administrator.** 
 
 
-https://github.com/user-attachments/assets/8693f539-4208-47f7-9fca-ced591f6035d
+https://github.com/user-attachments/assets/8693f539-4208-47f7-9fca-ced591f6035d  
 
-
-
+### Features  
+- Multiple pages with one or two sensors each
+- Each page can have it's own display interval
+- Icon support
+- Runable as normal user
+- Autostart support
+   
 ### How?
-As for now this project _(out of this README)_ is **fully** generated with GitHub CoPilot, so please take it with a grain of salt and feel free to raise an issue or PR to make it a bit better.
+As for now this project _(out of this README)_ is **fully** generated with GitHub CoPilot, so please take it with a grain of salt and feel free to raise an issue or PR to make it a bit better.  
 
 ## How to install  
 
@@ -44,7 +49,7 @@ Pages:
 - `IconId`: Set the [icon id](https://github.com/SteelSeries/gamesense-sdk/blob/master/doc/api/event-icons.md) of the page, which will be displayed on the OLED display
   
 Sensors:  
-- `Name`, `Hardware`, `Type`: Need to be exacty extracted from the `available-sensors.json` file. It's the filteruery to find the sensor in the LibreHardwareMonitorLib
+- `Name`, `Hardware`, `Type`: Need to be exacty extracted from the `available-sensors.json` file. It's the filter query to find the sensor in the LibreHardwareMonitorLib
 - `Prefix`: Set characters which will be displayed before the sensor value
 - `Suffix`: Set characters which will be displayed after the sensor value
 - `DecimalPlaces`: Set the number of decimal places which should be displayed for the sensor value
