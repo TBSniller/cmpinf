@@ -18,6 +18,7 @@ https://github.com/user-attachments/assets/8693f539-4208-47f7-9fca-ced591f6035d
 ### Features  
 - Multiple pages with one or two sensors each
 - Each page can have it's own display interval
+- Customizable sensor prefix and suffix
 - Icon support
 - Runable as normal user
 - Autostart support
