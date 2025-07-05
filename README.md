@@ -76,6 +76,6 @@ No issues are known so far, if you find one, feel free to raise an issue!
 - [SteelSeries GameSense SDK](https://github.com/SteelSeries/gamesense-sdk) for easy API usage <3  
 
 ### Screenshots
-![apex_oled](https://github.com/user-attachments/assets/6b01f38c-4522-4ba7-840b-92c0a722ffbe)  
+![IMG_7906](https://github.com/user-attachments/assets/4f488ec3-a82b-4973-8075-ad793656cd70)
 ![image](https://github.com/user-attachments/assets/d86b7ce4-732f-4fcd-aed3-c7242c3ec867)  
 ![image](https://github.com/user-attachments/assets/f2978d14-ab04-45c2-81b4-ece9565551ba)  
