@@ -81,7 +81,8 @@ No issues are known so far, if you find one, feel free to raise an issue!
 - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) for easy JSON handling <3  
 - [SteelSeries GameSense SDK](https://github.com/SteelSeries/gamesense-sdk) for easy API usage <3  
 
-### Screenshots
-![IMG_7906](https://github.com/user-attachments/assets/4f488ec3-a82b-4973-8075-ad793656cd70)
-![image](https://github.com/user-attachments/assets/d86b7ce4-732f-4fcd-aed3-c7242c3ec867)  
+### Screenshots  
+
+![image](https://githu![IMG_7906](https://github.com/user-attachments/assets/dd5928d4-c02d-425e-8f2f-b44a1f9fe047)
+b.com/user-attachments/assets/d86b7ce4-732f-4fcd-aed3-c7242c3ec867)  
 ![image](https://github.com/user-attachments/assets/f2978d14-ab04-45c2-81b4-ece9565551ba)  
