@@ -73,7 +73,11 @@ You can uninstall the application by right-clicking the tray icon and selecting 
 If you see a `-` as sensor value, it means that LibreHardwareMonitorLib was not able to read the sensor value. This can happen if administrator rights are required to read the sensor value. You can try to run the application as administrator (Right-click on the tray icon -> Settings -> Run as administrator).  
   
 ### Known issues  
-No issues are known so far, if you find one, feel free to raise an issue!  
+- [#2](https://github.com/TBSniller/cmpinf/issues/2): The shipped configuration is made on an Intel System. If it's used on an AMD CPU system, a missleading warning is shown.
+  
+  > Please use [CmpInf - Support Chat](https://chatgpt.com/g/g-68641753205881918fcb09f3d3331c55-cmpinf-support-chat) to create a working configuration, or double check your settings file.  
+
+No more issues are known so far, if you find one, feel free to raise an issue!  
   
 
 ### Credits
