@@ -1,0 +1,3 @@
+[submodule "gamesense-sdk"]
+	path = gamesense-sdk
+	url = https://github.com/SteelSeries/gamesense-sdk.git
