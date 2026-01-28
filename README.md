@@ -53,7 +53,10 @@ Global:
 - `GameSenseRetryIntervalMs`: Set the interval in milliseconds how often a reconnect will be attempted if the GameSense GG software is not available
 - `GameSenseHeartbeatIntervalMs`: Set the interval in milliseconds how often a heartbeat will be sent to the GameSense GG software, when no sensor was updated
 - `RunAsAdmin`: Set to `true` if you want to run the application as administrator
-  
+- `ShowCapsLockIndicator`: Set to `true` if you want the Caps Lock marker to display on the OLED.
+- `CapsLockIndicatorTextLine1`: Text that is prepended to line 1 when Caps Lock is active (default `⇪ `). Stick to BMP-friendly glyphs so surrogate-pair emoji do not break the display.
+- `CapsLockIndicatorTextLine2`: Text that is prepended to line 2 when Caps Lock is active (default two spaces) to keep the second line aligned when the first line receives the marker.
+
 Pages:  
 - `DurationMs`: Set the duration in milliseconds how long a page should be displayed
 - `IconId`: Set the [icon id](https://github.com/SteelSeries/gamesense-sdk/blob/master/doc/api/event-icons.md) of the page, which will be displayed on the OLED display
