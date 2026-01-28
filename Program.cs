@@ -59,8 +59,8 @@ class Program
             }
             if (!File.Exists(sensorsPath))
             {
-                var hardwareReaderExport = new HardwareReader();
-                hardwareReaderExport.ExportSensors(sensorsPath);
+                var initialDesiredMode = DetermineHardwareAccessMode(Settings.GetDefault());
+                GenerateAvailableSensors(sensorsPath, initialDesiredMode, "Initial sensor scan (first run)");
             }
             var result = MessageBox.Show(
                 "The application will now move itself to AppData and restart from there. You can access the settings and uninstall the application using the Tray-Icon.\n\nDo you want to create a shortcut on your Desktop?",
@@ -74,7 +74,7 @@ class Program
                 {
                     try
                     {
-                        dynamic shell = Activator.CreateInstance(shellType);
+                        dynamic? shell = Activator.CreateInstance(shellType);
                         if (shell == null) return;
                         dynamic shortcut = shell.CreateShortcut(shortcutPath);
                         shortcut.TargetPath = appDataExe;
@@ -97,15 +97,10 @@ class Program
             return;
         }
 
-        // Ensure settings and sensors files exist
+        // Ensure settings file exists
         if (!File.Exists(settingsPath))
         {
             File.WriteAllText(settingsPath, Newtonsoft.Json.JsonConvert.SerializeObject(Settings.GetDefault(), Newtonsoft.Json.Formatting.Indented));
-        }
-        if (!File.Exists(sensorsPath))
-        {
-            var hardwareReaderExport = new HardwareReader();
-            hardwareReaderExport.ExportSensors(sensorsPath);
         }
 
         if (!string.IsNullOrEmpty(appDataDir))
@@ -127,6 +122,12 @@ class Program
         {
             settings = Settings.GetDefault();
             Log.Warn("settings.json invalid, using defaults.");
+        }
+
+        var desiredMode = DetermineHardwareAccessMode(settings);
+        if (!File.Exists(sensorsPath))
+        {
+            GenerateAvailableSensors(sensorsPath, desiredMode, "Initial sensor scan");
         }
 
         // Admin rights check
@@ -160,10 +161,10 @@ class Program
         contextMenu.Items.Add(new ToolStripSeparator());
         var settingsMenu = new ToolStripMenuItem("Settings");
         settingsMenu.DropDownItems.Clear();
-        settingsMenu.DropDownItems.Add("Regenerate available-sensors.json", null, (s, e) => {
+        settingsMenu.DropDownItems.Add("Regenerate available-sensors.json (after installing PawnIO)", null, (s, e) => {
             try {
-                var hardwareReader = new HardwareReader();
-                hardwareReader.ExportSensors(SensorsFile);
+                var desiredMode = DetermineHardwareAccessMode(settings);
+                GenerateAvailableSensors(SensorsFile, desiredMode, "Manual sensor regeneration");
                 Log.Info("available-sensors.json regenerated.");
             } catch (Exception ex) { Log.Warn($"Regenerate sensors failed: {ex.Message}"); }
         });
@@ -171,8 +172,8 @@ class Program
             try {
                 if (!File.Exists(SensorsFile))
                 {
-                    var hardwareReader = new HardwareReader();
-                    hardwareReader.ExportSensors(SensorsFile);
+                    var desiredMode = DetermineHardwareAccessMode(settings);
+                    GenerateAvailableSensors(SensorsFile, desiredMode, "Opening available-sensors.json");
                 }
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                 {
@@ -301,7 +302,6 @@ class Program
     static async Task RunMonitor(string[] args)
     {
         Log.Info("Starting CmpInf...");
-        var hardwareReader = new HardwareReader();
         Settings? settings = await LoadSettings(SettingsFile);
         if (settings == null)
         {
@@ -310,6 +310,8 @@ class Program
             Log.Warn($"settings.json was created automatically. Please adjust and restart the program.");
             return;
         }
+        var desiredMode = DetermineHardwareAccessMode(settings);
+        var hardwareReader = new HardwareReader(desiredMode);
         CheckConfiguredSensorsExist(hardwareReader, settings);
         if (settings.Pages.Count == 0 || settings.Pages.All(p => p.Sensors.Count == 0))
         {
@@ -327,7 +329,7 @@ class Program
             for (int j = 0; j < pages[i].Sensors.Count; j++)
             {
                 var sensor = pages[i].Sensors[j];
-                var baseKey = $"{sensor.Name}_{sensor.Hardware}_{sensor.Type}".ToLowerInvariant().Replace(" ", "_").Replace("-", "_");
+                var baseKey = sensor.GetNormalizedBaseKey();
                 if (!keyInstanceCounter.ContainsKey(baseKey))
                     keyInstanceCounter[baseKey] = 1;
                 else
@@ -392,7 +394,7 @@ class Program
                     else
                     {
                         valueStr = "-";
-                        Log.Warn($"Sensor '{sel.Name}' could not be read. The program may need to be run as administrator.");
+                        Log.Warn($"Sensor '{sel.Name}' could not be read. PawnIO not installed or the program may need to be run as administrator.");
                     }
                     string line = $"{prefix.PadRight(prefixWidth)}{valueStr.PadLeft(valueWidth)}{suffix}";
                     return line.Length > 20 ? line.Substring(0, 20) : line;
@@ -485,5 +487,22 @@ class Program
             Verb = "runas"
         };
         try { System.Diagnostics.Process.Start(startInfo); } catch (Exception ex) { Log.Warn($"Restart as admin failed: {ex.Message}"); }
+    }
+
+    static HardwareAccessMode DetermineHardwareAccessMode(Settings settings)
+    {
+        var mode = settings.HardwareAccessMode;
+        if (mode == HardwareAccessMode.Full && !HardwareReader.IsPawnIoInstalled())
+        {
+            Log.Warn("PawnIO is not installed; falling back to SafeUserMode.");
+            return HardwareAccessMode.SafeUserMode;
+        }
+        return mode;
+    }
+
+    static void GenerateAvailableSensors(string path, HardwareAccessMode desiredMode, string context)
+    {
+        var reader = new HardwareReader(desiredMode);
+        reader.ExportSensors(path);
     }
 }

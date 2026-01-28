@@ -9,8 +9,7 @@ CmpInf is an application designed to work with the SteelSeries GameSense GG soft
   
 ### Why?  
 I noticed that one of the reasons I originally bought the keyboard has been removed. According to SteelSeries, they are addressing a security issue related to how the original System Monitor gathered system information.  
-In our case, we use LibreHardwareMonitorLib, which — as far as I know — relies on the same (still unpatched) Ring0 driver. However, I believe the attack surface in this application is much smaller than with the System Monitor that ships with GG, since we do not run as admin by default and do not expose any interfaces to the outside.   
-**Netherless be warned and try to avoid running this tool as administrator.** 
+We now depend on LibreHardwareMonitorLib v0.9.5, which ships the PawnIO kernel driver instead of the legacy WinRing0 component, so the vulnerability that SteelSeries has been patching no longer applies to this replacement. PawnIO is extra software and only needs to be installed if there is a need for CPU or motherboard sensors. 
 
 
 https://github.com/user-attachments/assets/8693f539-4208-47f7-9fca-ced591f6035d  
@@ -24,13 +23,21 @@ https://github.com/user-attachments/assets/8693f539-4208-47f7-9fca-ced591f6035d
 - Autostart support
    
 ### How?
-As for now this project _(out of this README)_ is **fully** generated with GitHub CoPilot, so please take it with a grain of salt and feel free to raise an issue or PR to make it a bit better.  
+As for now this project _(out of this README)_ is **fully** generated with GitHub CoPilot/Codex, so please take it with a grain of salt and feel free to raise an issue or PR to make it a bit better.  
 
 ## How to install  
 
 ### What do you need?  
 - [SteelSeries GG](https://steelseries.com/gg) installed and running (consider to put it into autostart)
 - [Download](https://github.com/TBSniller/cmpinf/releases/latest) the latest release of CmpInf and run it
+- [PawnIO](https://pawnio.eu/) optional for CPU and motherboard sensors
+
+### LibreHardwareMonitor driver
+CmpInf uses LibreHardwareMonitorLib v0.9.5, which bundles PawnIO as the successor to the WinRing0 driver. PawnIO is the signed kernel component that LibreHardwareMonitor uses as additional sensor information source. 
+
+### PawnIO requirement
+PawnIO is required for some motherboard or CPU sensors that LibreHardwareMonitorLib alone does not expose. Without PawnIO, CmpInf falls back to its **SafeUserMode (no-kernel)** operating profile, which keeps GPU, storage, and network sensors running while omitting kernel-only sources such as motherboard and CPU controllers. Be aware that PawnIO can influence cheat detection software like FaceIT: https://github.com/namazso/PawnIO.Setup/issues/1
+
 
 ## How to use
 ### First start  

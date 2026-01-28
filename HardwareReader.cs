@@ -1,28 +1,87 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using LibreHardwareMonitor.Hardware;
+using PawnIoDriver = LibreHardwareMonitor.PawnIo.PawnIo;
 using Newtonsoft.Json;
 
 public class HardwareReader
 {
     private readonly Computer _computer;
+    private readonly HardwareAccessMode _accessMode;
+    private bool _initialized;
+    private bool _initializationWarningLogged;
     public List<(string Name, string Hardware, string Type)> AllSensors { get; } = new();
 
-    public HardwareReader()
+    public bool IsInitialized => _initialized;
+
+    public static void LogPawnIoStatus()
     {
+        var (installed, version, error) = GetPawnIoState();
+        Log.Info($"PawnIO status — installed: {installed}, version: {version}");
+        if (!string.IsNullOrEmpty(error))
+        {
+            Log.Warn($"PawnIO status could not be determined: {error}");
+        }
+        if (!installed)
+        {
+            Log.Warn("PawnIO must be installed separately for motherboard/CPU sensors; those sensors may be unavailable until it is installed.");
+        }
+    }
+
+    public static bool IsPawnIoInstalled() => GetPawnIoState().Installed;
+
+    public static string GetPawnIoVersion() => GetPawnIoState().Version;
+
+    private static (bool Installed, string Version, string? Error) GetPawnIoState()
+    {
+        try
+        {
+            return (PawnIoDriver.IsInstalled, PawnIoDriver.Version?.ToString() ?? "unknown", null);
+        }
+        catch (Exception ex)
+        {
+            return (false, "unknown", ex.Message);
+        }
+    }
+
+    public HardwareReader()
+        : this(HardwareAccessMode.Full)
+    {
+    }
+
+    public HardwareReader(HardwareAccessMode accessMode)
+    {
+        _accessMode = accessMode;
         _computer = new Computer
         {
-            IsCpuEnabled = true,
+            IsCpuEnabled = accessMode == HardwareAccessMode.Full,
             IsGpuEnabled = true,
-            IsMotherboardEnabled = true,
+            IsMotherboardEnabled = accessMode == HardwareAccessMode.Full,
             IsMemoryEnabled = true,
-            IsControllerEnabled = true,
+            IsControllerEnabled = accessMode == HardwareAccessMode.Full,
             IsNetworkEnabled = true,
             IsStorageEnabled = true
         };
-        _computer.Open();
-        ScanAllSensors();
+
+        if (_accessMode == HardwareAccessMode.SafeUserMode)
+            Log.Info("Hardware access mode: SafeUserMode (kernel/board sensors disabled; PawnIO not required).");
+        else
+            Log.Info("Hardware access mode: Full (PawnIO is required for motherboard/CPU sensor coverage).");
+
+        LogPawnIoStatus();
+
+        try
+        {
+            _computer.Open();
+            ScanAllSensors();
+            _initialized = true;
+        }
+        catch (Exception ex)
+        {
+            Log.Warn($"Hardware initialization failed ({_accessMode}): {ex.Message}");
+        }
     }
 
     private void ScanAllSensors()
@@ -40,6 +99,13 @@ public class HardwareReader
 
     public void ExportSensors(string path)
     {
+        if (!_initialized)
+        {
+            Log.Warn("available-sensors.json export skipped: hardware initialization failed.");
+            File.WriteAllText(path, JsonConvert.SerializeObject(Array.Empty<object>(), Formatting.Indented));
+            return;
+        }
+
         var export = AllSensors.Select(s => new { Name = s.Name, Hardware = s.Hardware, Type = s.Type }).ToList();
         File.WriteAllText(path, JsonConvert.SerializeObject(export, Formatting.Indented));
     }
@@ -47,12 +113,20 @@ public class HardwareReader
     public Dictionary<string, float> GetSensorValues(List<SensorSelection> selected)
     {
         var result = new Dictionary<string, float>(StringComparer.OrdinalIgnoreCase);
-        // Update hardware only once per tick
+        if (!_initialized)
+        {
+            if (!_initializationWarningLogged)
+            {
+                Log.Warn("Skipping sensor polling because hardware initialization failed.");
+                _initializationWarningLogged = true;
+            }
+            return result;
+        }
+
         foreach (var hardware in _computer.Hardware)
         {
             UpdateRecursive(hardware);
         }
-        // Only search for relevant sensors for performance
         foreach (var sel in selected)
         {
             foreach (var hardware in _computer.Hardware)
@@ -65,7 +139,7 @@ public class HardwareReader
                 }
                 catch (Exception ex)
                 {
-                    Log.Warn($"Sensor '{sel.Name}' could not be read. The program may need to be run as administrator. Error: {ex.Message}");
+                    Log.Warn($"Sensor \"{sel.Name}\" could not be read. PawnIO not installed or the program may need to be run as administrator. Error: {ex.Message}");
                 }
             }
         }
