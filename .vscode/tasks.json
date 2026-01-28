@@ -46,7 +46,7 @@
         "/p:IncludeAllContentForSelfExtract=true",
         "/p:PublishTrimmed=false",
         "--output",
-        "bin/Debug/net9.0-windows/win-x64/publish"
+        "bin/Debug/net10.0-windows/win-x64/publish"
       ],
       "problemMatcher": ["$msCompile"],
       "group": "none",
@@ -70,7 +70,7 @@
         "/p:IncludeAllContentForSelfExtract=true",
         "/p:PublishTrimmed=false",
         "--output",
-        "bin/Release/net9.0-windows/win-x64/publish"
+        "bin/Release/net10.0-windows/win-x64/publish"
       ],
       "problemMatcher": ["$msCompile"],
       "group": "none",

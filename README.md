@@ -28,6 +28,7 @@ As for now this project _(out of this README)_ is **fully** generated with GitHu
 ## How to install  
 
 ### What do you need?  
+- [.NET 10](https://dotnet.microsoft.com/en-us/download/dotnet/10.0/runtime)
 - [SteelSeries GG](https://steelseries.com/gg) installed and running (consider to put it into autostart)
 - [Download](https://github.com/TBSniller/cmpinf/releases/latest) the latest release of CmpInf and run it
 - [PawnIO](https://pawnio.eu/) optional for CPU and motherboard sensors
