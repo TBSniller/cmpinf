@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 public class Settings
 {
@@ -13,6 +14,9 @@ public class Settings
     public int GameSenseHeartbeatIntervalMs { get; set; } = 10000; // Default: 10 seconds
     [JsonProperty("RunAsAdmin")]
     public bool RunAsAdmin { get; set; } = false;
+    [JsonProperty("HardwareAccessMode")]
+    [JsonConverter(typeof(StringEnumConverter))]
+    public HardwareAccessMode HardwareAccessMode { get; set; } = HardwareAccessMode.Full;
 
     /// Returns a default Settings object with three example pages.
     public static Settings GetDefault()
@@ -22,6 +26,7 @@ public class Settings
             UpdateIntervalMs = 1000,
             GameSenseRetryIntervalMs = 5000,
             GameSenseHeartbeatIntervalMs = 10000,
+            HardwareAccessMode = HardwareAccessMode.Full,
             Pages = new List<OledPage>
             {
                 new OledPage
@@ -30,8 +35,8 @@ public class Settings
                     IconId = 43,
                     Sensors = new List<SensorSelection>
                     {
-                        new SensorSelection { Name = "CPU Package", Hardware = "Cpu", Type = "Temperature", Prefix = "CPU: ", Suffix = " °C", DecimalPlaces = 0 },
-                        new SensorSelection { Name = "GPU Core", Hardware = "GpuNvidia", Type = "Temperature", Prefix = "GPU: ", Suffix = " °C", DecimalPlaces = 0 }
+                        new SensorSelection { Name = "CPU Package", Hardware = "Cpu", Type = "Temperature", Prefix = "CPU: ", Suffix = " Â°C", DecimalPlaces = 0 },
+                        new SensorSelection { Name = "GPU Core", Hardware = "GpuNvidia", Type = "Temperature", Prefix = "GPU: ", Suffix = " Â°C", DecimalPlaces = 0 }
                     }
                 },
                 new OledPage
@@ -85,11 +90,21 @@ public class SensorSelection
 
     // Set during paging to ensure unique keys for duplicate sensors
     public int KeyInstance { get; set; } = 1;
-    public string GetContextFrameKey()
+
+    private string NormalizeBaseKey()
     {
         if (string.IsNullOrWhiteSpace(Name) && string.IsNullOrWhiteSpace(Hardware) && string.IsNullOrWhiteSpace(Type))
+            return "dummy";
+        return $"{Name}_{Hardware}_{Type}".ToLowerInvariant().Replace(" ", "_").Replace("-", "_");
+    }
+
+    public string GetNormalizedBaseKey() => NormalizeBaseKey();
+
+    public string GetContextFrameKey()
+    {
+        var baseKey = NormalizeBaseKey();
+        if (baseKey == "dummy")
             return $"dummy_{KeyInstance}";
-        var baseKey = $"{Name}_{Hardware}_{Type}".ToLowerInvariant().Replace(" ", "_").Replace("-", "_");
         return KeyInstance > 1 ? $"{baseKey}_{KeyInstance}" : baseKey;
     }
 }

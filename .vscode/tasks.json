@@ -1,0 +1,80 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Restore dependencies",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "restore",
+        "CmpInf.csproj"
+      ],
+      "problemMatcher": ["$msCompile"],
+      "group": "none"
+    },
+    {
+      "label": "Build (Debug)",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "CmpInf.csproj",
+        "-c",
+        "Debug"
+      ],
+      "problemMatcher": ["$msCompile"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Publish (Debug Single File)",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "publish",
+        "CmpInf.csproj",
+        "-c",
+        "Debug",
+        "-r",
+        "win-x64",
+        "--self-contained",
+        "true",
+        "/p:PublishSingleFile=true",
+        "/p:IncludeNativeLibrariesForSelfExtract=true",
+        "/p:IncludeAllContentForSelfExtract=true",
+        "/p:PublishTrimmed=false",
+        "--output",
+        "bin/Debug/net10.0-windows/win-x64/publish"
+      ],
+      "problemMatcher": ["$msCompile"],
+      "group": "none",
+      "dependsOn": "Restore dependencies"
+    },
+    {
+      "label": "Publish (Release Single File)",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "publish",
+        "CmpInf.csproj",
+        "-c",
+        "Release",
+        "-r",
+        "win-x64",
+        "--self-contained",
+        "true",
+        "/p:PublishSingleFile=true",
+        "/p:IncludeNativeLibrariesForSelfExtract=true",
+        "/p:IncludeAllContentForSelfExtract=true",
+        "/p:PublishTrimmed=false",
+        "--output",
+        "bin/Release/net10.0-windows/win-x64/publish"
+      ],
+      "problemMatcher": ["$msCompile"],
+      "group": "none",
+      "dependsOn": "Restore dependencies"
+    }
+  ]
+}

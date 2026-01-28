@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch CmpInf (Debug Single File)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "Publish (Debug Single File)",
+      "program": "${workspaceFolder}/bin/Debug/net9.0-windows/win-x64/publish/CmpInf.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "Launch installed AppData copy",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${env:APPDATA}/CmpInf_SteelSeriesOledPcInfo/CmpInf_SteelSeriesOledPcInfo.exe",
+      "args": [],
+      "cwd": "${env:APPDATA}/CmpInf_SteelSeriesOledPcInfo",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ]
+}

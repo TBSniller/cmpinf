@@ -9,7 +9,11 @@ obj/
 *.sln.docstates
 
 # Visual Studio Code
-.vscode/
+.vscode/*
+.vscode/settings.json
+.vscode/*.code-workspace
+!.vscode/tasks.json
+!.vscode/launch.json
 
 # Rider
 .idea/
