@@ -15,6 +15,7 @@ class Program
     private const string ExeName = "CmpInf_SteelSeriesOledPcInfo.exe";
     private const string SettingsFile = "settings.json";
     private const string SensorsFile = "available-sensors.json";
+    private const int OledLineWidth = 20;
 
     /// <summary>
     /// Main entry point. Handles self-move to AppData, settings/sensors file creation, and tray icon setup.
@@ -378,10 +379,14 @@ class Program
                 else
                     return 1; // "-"
             });
+            bool capsOn = settings.ShowCapsLockIndicator && Control.IsKeyLocked(Keys.CapsLock);
+            string indicatorLine1 = settings.CapsLockIndicatorTextLine1 ?? string.Empty;
+            string indicatorLine2 = settings.CapsLockIndicatorTextLine2 ?? string.Empty;
             var lines = pageSensors
-                .Select(sel =>
+                .Select((sel, index) =>
                 {
-                    if (string.IsNullOrWhiteSpace(sel.Name)) return " ";
+                    if (string.IsNullOrWhiteSpace(sel.Name))
+                        return " ";
                     var prefix = string.IsNullOrWhiteSpace(sel.Prefix) ? sel.Name : sel.Prefix;
                     var suffix = sel.Suffix ?? string.Empty;
                     int decimals = sel.DecimalPlaces;
@@ -396,13 +401,48 @@ class Program
                         valueStr = "-";
                         Log.Warn($"Sensor '{sel.Name}' could not be read. PawnIO not installed or the program may need to be run as administrator.");
                     }
-                    string line = $"{prefix.PadRight(prefixWidth)}{valueStr.PadLeft(valueWidth)}{suffix}";
-                    return line.Length > 20 ? line.Substring(0, 20) : line;
+                    string baseLine = $"{prefix.PadRight(prefixWidth)}{valueStr.PadLeft(valueWidth)}{suffix}";
+                    string line = baseLine;
+                    if (capsOn)
+                    {
+                        string indicatorText = index == 0 ? indicatorLine1 : index == 1 ? indicatorLine2 : string.Empty;
+                        if (!string.IsNullOrEmpty(indicatorText))
+                        {
+                            var combined = indicatorText + baseLine;
+                            line = combined.Length > OledLineWidth ? combined.Substring(0, OledLineWidth) : combined;
+                        }
+                    }
+                    if (!capsOn && line.Length > OledLineWidth)
+                    {
+                        line = line.Substring(0, OledLineWidth);
+                    }
+                    return line;
                 })
                 .ToArray();
             Log.Debug($"Page {page + 1}/{pages.Count}: {string.Join(", ", lines)}");
             await gameSenseClient.SendOledDisplayAsync(eventNames[page], lines);
-            await Task.Delay(settings.UpdateIntervalMs);
+            await WaitForNextUpdate(settings, capsOn);
+        }
+    }
+
+    private static async Task WaitForNextUpdate(Settings settings, bool currentCapsOn)
+    {
+        int intervalMs = Math.Max(1, settings.UpdateIntervalMs);
+        var deadline = DateTime.UtcNow.AddMilliseconds(intervalMs);
+        while (true)
+        {
+            bool nowCapsOn = settings.ShowCapsLockIndicator && Control.IsKeyLocked(Keys.CapsLock);
+            if (nowCapsOn != currentCapsOn)
+            {
+                return;
+            }
+            int remaining = (int)Math.Ceiling((deadline - DateTime.UtcNow).TotalMilliseconds);
+            if (remaining <= 0)
+            {
+                return;
+            }
+            int delay = Math.Min(remaining, 50);
+            await Task.Delay(delay);
         }
     }
 

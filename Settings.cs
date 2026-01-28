@@ -17,6 +17,12 @@ public class Settings
     [JsonProperty("HardwareAccessMode")]
     [JsonConverter(typeof(StringEnumConverter))]
     public HardwareAccessMode HardwareAccessMode { get; set; } = HardwareAccessMode.Full;
+    [JsonProperty("ShowCapsLockIndicator")]
+    public bool ShowCapsLockIndicator { get; set; } = true;
+    [JsonProperty("CapsLockIndicatorTextLine1")]
+    public string CapsLockIndicatorTextLine1 { get; set; } = "⇪ ";
+    [JsonProperty("CapsLockIndicatorTextLine2")]
+    public string CapsLockIndicatorTextLine2 { get; set; } = "  ";
 
     /// Returns a default Settings object with three example pages.
     public static Settings GetDefault()
@@ -27,6 +33,9 @@ public class Settings
             GameSenseRetryIntervalMs = 5000,
             GameSenseHeartbeatIntervalMs = 10000,
             HardwareAccessMode = HardwareAccessMode.Full,
+            ShowCapsLockIndicator = true,
+            CapsLockIndicatorTextLine1 = "⇪ ",
+            CapsLockIndicatorTextLine2 = "  ",
             Pages = new List<OledPage>
             {
                 new OledPage
