@@ -37,7 +37,8 @@ As for now this project _(out of this README)_ is **fully** generated with GitHu
 CmpInf uses LibreHardwareMonitorLib v0.9.5, which bundles PawnIO as the successor to the WinRing0 driver. PawnIO is the signed kernel component that LibreHardwareMonitor uses as additional sensor information source. 
 
 ### PawnIO requirement
-PawnIO is required for some motherboard or CPU sensors that LibreHardwareMonitorLib alone does not expose. Without PawnIO, CmpInf falls back to its **SafeUserMode (no-kernel)** operating profile, which keeps GPU, storage, and network sensors running while omitting kernel-only sources such as motherboard and CPU controllers. Be aware that PawnIO can influence cheat detection software like FaceIT: https://github.com/namazso/PawnIO.Setup/issues/1
+PawnIO is required for some motherboard or CPU sensors that LibreHardwareMonitorLib alone does not expose. Without PawnIO, CmpInf falls back to its **SafeUserMode (no-kernel)** operating profile, which keeps GPU, storage, and network sensors running while omitting kernel-only sources such as motherboard and CPU controllers.  
+**Be aware that PawnIO can influence cheat detection software like FaceIT: [namazso/PawnIO.Setup #1](https://github.com/namazso/PawnIO.Setup/issues/1)**
 
 
 ## How to use
@@ -89,12 +90,14 @@ No more issues are known so far, if you find one, feel free to raise an issue!
   
 
 ### Credits
-- [LibreHardwareMonitorLib](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) for sensor data <3  
+- [LibreHardwareMonitorLib](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) for sensor data <3
+- [PawnIO](https://github.com/namazso/PawnIO) for even more sensor data <3
 - [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) for easy JSON handling <3  
 - [SteelSeries GameSense SDK](https://github.com/SteelSeries/gamesense-sdk) for easy API usage <3  
 
 ### Screenshots  
 
 ![IMG_7906](https://github.com/user-attachments/assets/dd5928d4-c02d-425e-8f2f-b44a1f9fe047)
-![image](https://github.com/user-attachments/assets/d86b7ce4-732f-4fcd-aed3-c7242c3ec867)  
-![image](https://github.com/user-attachments/assets/f2978d14-ab04-45c2-81b4-ece9565551ba)  
+<img width="499" height="176" alt="image" src="https://github.com/user-attachments/assets/4974645d-2834-4d1e-8467-0f1fafe72a6e" />  
+<img width="498" height="330" alt="image" src="https://github.com/user-attachments/assets/97cac6d2-e95e-4f23-bdd0-4bcc3c93181b" />
+  
