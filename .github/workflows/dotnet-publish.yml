@@ -18,6 +18,7 @@ jobs:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
     outputs:
       new_tag: ${{ steps.tag.outputs.new_tag }}
       previous_tag: ${{ steps.tag.outputs.previous_tag }}
@@ -33,13 +34,18 @@ jobs:
         with:
           dotnet-version: "10.0.x"
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
+      - name: Restore NuGet cache
+        id: nuget-cache
+        uses: actions/cache/restore@v4
         with:
-          path: ~/.nuget/packages
+          path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/Directory.Packages.props', '**/global.json', '**/nuget.config') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+
+      - name: Ensure NuGet packages directory exists
+        shell: pwsh
+        run: New-Item -ItemType Directory -Path "${{ env.NUGET_PACKAGES }}" -Force | Out-Null
 
       - name: Determine next release tag
         id: tag
@@ -63,7 +69,7 @@ jobs:
           "previous_tag=$latestTag" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore --packages "${{ env.NUGET_PACKAGES }}"
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
@@ -80,6 +86,13 @@ jobs:
           name: CmpInf-win-x64-singlefile
           path: publish/*.exe
           if-no-files-found: error
+
+      - name: Save NuGet cache
+        if: always() && steps.nuget-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: ${{ steps.nuget-cache.outputs.cache-primary-key }}
 
   release:
     if: github.ref == 'refs/heads/main'
