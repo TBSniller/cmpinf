@@ -1,51 +1,26 @@
 version: 2
-updates:
-  - package-ecosystem: "nuget"
-    directory: "/"
-    target-branch: "main"
+multi-ecosystem-groups:
+  bundled-dependencies:
     schedule:
       interval: "weekly"
       day: "monday"
       time: "05:00"
       timezone: "Europe/Berlin"
-    open-pull-requests-limit: 2
     labels:
       - "dependencies"
       - "security"
-    groups:
-      nuget-non-breaking:
-        patterns:
-          - "*"
-        update-types:
-          - "patch"
-          - "minor"
-      nuget-major:
-        patterns:
-          - "*"
-        update-types:
-          - "major"
+    target-branch: "main"
+updates:
+  - package-ecosystem: "nuget"
+    directory: "/"
+    open-pull-requests-limit: 1
+    patterns:
+      - "*"
+    multi-ecosystem-group: "bundled-dependencies"
 
   - package-ecosystem: "github-actions"
     directory: "/"
-    target-branch: "main"
-    schedule:
-      interval: "weekly"
-      day: "monday"
-      time: "05:15"
-      timezone: "Europe/Berlin"
-    open-pull-requests-limit: 2
-    labels:
-      - "dependencies"
-      - "security"
-    groups:
-      github-actions-non-breaking:
-        patterns:
-          - "*"
-        update-types:
-          - "patch"
-          - "minor"
-      github-actions-major:
-        patterns:
-          - "*"
-        update-types:
-          - "major"
+    open-pull-requests-limit: 1
+    patterns:
+      - "*"
+    multi-ecosystem-group: "bundled-dependencies"
