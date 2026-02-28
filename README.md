@@ -82,6 +82,10 @@ You can uninstall the application by right-clicking the tray icon and selecting 
 
 ## Other
 
+### CI and releases
+Dependency updates are created automatically via Dependabot as pull requests against `main`.
+Every merge into `main` triggers the GitHub Actions build pipeline. If build and publish succeed, the workflow creates a new `v*` tag, publishes a new GitHub Release, marks it as `latest`, and appends a `build by` link to the exact workflow run.
+
 ### Troubleshooting
 If you see a `-` as sensor value, it means that LibreHardwareMonitorLib was not able to read the sensor value. This can happen if administrator rights are required to read the sensor value. You can try to run the application as administrator (Right-click on the tray icon -> Settings -> Run as administrator).  
 After PawnIO updates, regenerate `available-sensors.json` from the tray menu once so your config can be validated against current sensor names.
