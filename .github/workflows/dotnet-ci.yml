@@ -20,6 +20,7 @@ jobs:
       DOTNET_NOLOGO: true
       DOTNET_CLI_TELEMETRY_OPTOUT: true
       DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -32,19 +33,31 @@ jobs:
         with:
           dotnet-version: "10.0.x"
 
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
+      - name: Restore NuGet cache
+        id: nuget-cache
+        uses: actions/cache/restore@v4
         with:
-          path: ~/.nuget/packages
+          path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/Directory.Packages.props', '**/global.json', '**/nuget.config') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
 
+      - name: Ensure NuGet packages directory exists
+        shell: pwsh
+        run: New-Item -ItemType Directory -Path "${{ env.NUGET_PACKAGES }}" -Force | Out-Null
+
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore --packages "${{ env.NUGET_PACKAGES }}"
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
+
+      - name: Save NuGet cache
+        if: always() && steps.nuget-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.NUGET_PACKAGES }}
+          key: ${{ steps.nuget-cache.outputs.cache-primary-key }}
