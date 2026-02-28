@@ -30,13 +30,13 @@ jobs:
           persist-credentials: false
 
       - name: Setup .NET 10.x
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: "10.0.x"
 
       - name: Restore NuGet cache
         id: nuget-cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/Directory.Packages.props', '**/global.json', '**/nuget.config') }}
@@ -89,7 +89,7 @@ jobs:
 
       - name: Save NuGet cache
         if: always() && steps.nuget-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: ${{ env.NUGET_PACKAGES }}
           key: ${{ steps.nuget-cache.outputs.cache-primary-key }}
