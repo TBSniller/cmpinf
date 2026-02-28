@@ -9,7 +9,7 @@ CmpInf is an application designed to work with the SteelSeries GameSense GG soft
   
 ### Why?  
 I noticed that one of the reasons I originally bought the keyboard has been removed. According to SteelSeries, they are addressing a security issue related to how the original System Monitor gathered system information.  
-We now depend on LibreHardwareMonitorLib v0.9.5, which ships the PawnIO kernel driver instead of the legacy WinRing0 component, so the vulnerability that SteelSeries has been patching no longer applies to this replacement. PawnIO is extra software and only needs to be installed if there is a need for CPU or motherboard sensors. 
+We now depend on LibreHardwareMonitorLib v0.9.5+, which ships the PawnIO kernel driver instead of the legacy WinRing0 component, so the vulnerability that SteelSeries has been patching no longer applies to this replacement. PawnIO is extra software and only needs to be installed if there is a need for CPU or motherboard sensors. 
 
 
 https://github.com/user-attachments/assets/8693f539-4208-47f7-9fca-ced591f6035d  
@@ -35,7 +35,7 @@ As for now this project _(out of this README)_ is **fully** generated with GitHu
 - [PawnIO](https://pawnio.eu/) optional for CPU and motherboard sensors
 
 ### LibreHardwareMonitor driver
-CmpInf uses LibreHardwareMonitorLib v0.9.5, which bundles PawnIO as the successor to the WinRing0 driver. PawnIO is the signed kernel component that LibreHardwareMonitor uses as additional sensor information source. 
+CmpInf uses LibreHardwareMonitorLib v0.9.6, which bundles PawnIO as the successor to the WinRing0 driver. PawnIO is the signed kernel component that LibreHardwareMonitor uses as additional sensor information source. 
 
 ### PawnIO requirement
 PawnIO is required for some motherboard or CPU sensors that LibreHardwareMonitorLib alone does not expose. Without PawnIO, CmpInf falls back to its **SafeUserMode (no-kernel)** operating profile, which keeps GPU, storage, and network sensors running while omitting kernel-only sources such as motherboard and CPU controllers.  
@@ -84,6 +84,7 @@ You can uninstall the application by right-clicking the tray icon and selecting 
 
 ### Troubleshooting
 If you see a `-` as sensor value, it means that LibreHardwareMonitorLib was not able to read the sensor value. This can happen if administrator rights are required to read the sensor value. You can try to run the application as administrator (Right-click on the tray icon -> Settings -> Run as administrator).  
+After PawnIO updates, regenerate `available-sensors.json` from the tray menu once so your config can be validated against current sensor names.
   
 ### Known issues  
 - [#2](https://github.com/TBSniller/cmpinf/issues/2): The shipped configuration is made on an Intel System. If it's used on an AMD CPU system, a missleading warning is shown.
