@@ -1,6 +1,7 @@
 version: 2
 multi-ecosystem-groups:
   bundled-dependencies:
+    open-pull-requests-limit: 1
     schedule:
       interval: "weekly"
       day: "monday"
@@ -13,14 +14,12 @@ multi-ecosystem-groups:
 updates:
   - package-ecosystem: "nuget"
     directory: "/"
-    open-pull-requests-limit: 1
     patterns:
       - "*"
     multi-ecosystem-group: "bundled-dependencies"
 
   - package-ecosystem: "github-actions"
     directory: "/"
-    open-pull-requests-limit: 1
     patterns:
       - "*"
     multi-ecosystem-group: "bundled-dependencies"
