@@ -70,7 +70,7 @@ jobs:
         run: dotnet publish CmpInf.csproj --configuration Release --runtime win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true --output publish
 
       - name: Upload published artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: CmpInf-win-x64-singlefile
           path: publish/*.exe
