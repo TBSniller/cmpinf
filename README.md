@@ -83,8 +83,8 @@ You can uninstall the application by right-clicking the tray icon and selecting 
 ## Other
 
 ### CI and releases
-Dependency updates are created automatically via Dependabot as pull requests against `main`.
-Every merge into `main` triggers the GitHub Actions build pipeline. If build and publish succeed, the workflow creates a new `v*` tag, publishes a new GitHub Release, marks it as `latest`, and appends a `build by` link to the exact workflow run.
+Dependency updates are created automatically via Dependabot as pull requests against `main`. Dependabot updates are grouped (non-breaking and major) and limited to keep the number of open PRs low.
+Every pull request to `main` runs CI (`restore`, `build`, `test`) before merge. After a merge into `main`, the release workflow builds and publishes the app, creates a new `v*` tag, marks the GitHub Release as `latest`, and writes both the commit-based change list and the `build by` workflow URL into the release notes.
 
 ### Troubleshooting
 If you see a `-` as sensor value, it means that LibreHardwareMonitorLib was not able to read the sensor value. This can happen if administrator rights are required to read the sensor value. You can try to run the application as administrator (Right-click on the tray icon -> Settings -> Run as administrator).  
