@@ -84,7 +84,7 @@ You can uninstall the application by right-clicking the tray icon and selecting 
 
 ### CI and releases
 Dependency updates are created automatically via Dependabot as pull requests against `main`. NuGet and GitHub Actions updates are bundled into one shared Dependabot group and limited to one open PR to reduce review overhead.
-Every pull request to `main` runs CI (`restore`, `build`, `test`) before merge. Releases are created manually via the GitHub Actions workflow run button on `main`; the workflow builds and publishes the app, creates a new `v*` tag, marks the GitHub Release as `latest`, and writes both the commit-based change list and the `build by` workflow URL into the release notes.
+Every pull request to `main` runs CI (`restore`, `build`, `test`) before merge. CI and release builds use a NuGet package cache to reduce runtime while keeping deterministic dependency resolution via project-file keyed cache invalidation. Releases are created manually via the GitHub Actions workflow run button on `main`; the workflow builds and publishes the app, creates a new `v*` tag, marks the GitHub Release as `latest`, and writes both the commit-based change list and the `build by` workflow URL into the release notes.
 
 ### Troubleshooting
 If you see a `-` as sensor value, it means that LibreHardwareMonitorLib was not able to read the sensor value. This can happen if administrator rights are required to read the sensor value. You can try to run the application as administrator (Right-click on the tray icon -> Settings -> Run as administrator).  
