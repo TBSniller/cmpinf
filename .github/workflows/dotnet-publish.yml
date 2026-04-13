@@ -152,7 +152,7 @@ jobs:
           path: publish
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.ensure_tag.outputs.tag }}
           name: Release ${{ steps.ensure_tag.outputs.tag }}
